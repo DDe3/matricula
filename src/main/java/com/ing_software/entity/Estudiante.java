@@ -1,14 +1,17 @@
 package com.ing_software.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 public class Estudiante extends Persona {
 
-    private Date f_nacimiento;
-    private Date f_inscripcion;
     private Boolean estado;
 
 
@@ -26,7 +29,7 @@ public class Estudiante extends Persona {
     @OneToMany(mappedBy = "registro", cascade = CascadeType.ALL)
     private List<Matricula> matriculasRegistradas;
 
-    @OneToOne(mappedBy = "owner1")
+    @OneToOne(mappedBy = "owner1", cascade = CascadeType.ALL)
     private Cuenta cuenta;
 
     @OneToMany(mappedBy = "pert", cascade = CascadeType.ALL)

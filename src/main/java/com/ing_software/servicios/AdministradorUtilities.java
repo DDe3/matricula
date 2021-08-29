@@ -1,5 +1,6 @@
-package com.ing_software;
+package com.ing_software.servicios;
 
+import com.ing_software.Resultado;
 import com.ing_software.entity.Curso;
 import com.ing_software.entity.Estudiante;
 import com.ing_software.entity.Profesor;

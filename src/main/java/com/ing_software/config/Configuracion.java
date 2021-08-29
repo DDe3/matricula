@@ -3,6 +3,8 @@ package com.ing_software.config;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.se.SeContainer;
+import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,7 +16,7 @@ public class Configuracion {
     @ApplicationScoped
     public EntityManagerFactory entityManagerFactory() {
         EntityManagerFactory factory = Persistence
-                .createEntityManagerFactory("avanzada");
+                .createEntityManagerFactory("matricula");
         return factory;
     }
 
@@ -32,5 +34,13 @@ public class Configuracion {
             entityManager.close();
         }
     }
+
+    @Produces
+    @ApplicationScoped
+    public SeContainer container() {
+        return SeContainerInitializer.newInstance().initialize();
+    }
+
+
 
 }

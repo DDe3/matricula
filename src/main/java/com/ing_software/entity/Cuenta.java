@@ -1,7 +1,10 @@
 package com.ing_software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 public class Cuenta {
 

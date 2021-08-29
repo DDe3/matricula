@@ -1,5 +1,6 @@
-package com.ing_software;
+package com.ing_software.servicios;
 
+import com.ing_software.Resultado;
 import com.ing_software.entity.Estudiante;
 
 public class MatriculaUtilities {

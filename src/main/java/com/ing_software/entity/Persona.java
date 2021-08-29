@@ -13,9 +13,6 @@ public abstract class Persona {
     @Column(name = "id")
     int id;
     String nombre;
-    String genero;
-    Integer edad;
-    String nacionalidad;
     String telefono;
     String mail;
 
