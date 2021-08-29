@@ -1,0 +1,42 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+    <persistence-unit name="avanzada">
+        <class>com.ing_software.entity.Administrativo</class>
+        <class>com.ing_software.entity.Contrato</class>
+        <class>com.ing_software.entity.Cuenta</class>
+        <class>com.ing_software.entity.Curso</class>
+        <class>com.ing_software.entity.Estudiante</class>
+        <class>com.ing_software.entity.Persona</class>
+        <class>com.ing_software.entity.Materia</class>
+        <class>com.ing_software.entity.Matricula</class>
+        <class>com.ing_software.entity.Nota</class>
+        <class>com.ing_software.entity.Profesor</class>
+        <class>com.ing_software.entity.Representante</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver"
+                      value="org.postgresql.Driver" />
+
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:postgresql://hattie.db.elephantsql.com:5432/ezstgicp" />
+
+            <property name="javax.persistence.jdbc.user"
+                      value="ezstgicp" />
+
+            <property name="javax.persistence.jdbc.password"
+                      value="ZR8hj3Xa7tgNemI9z3uGnM_GiV6nksAN" />
+
+            <property name="javax.persistence.schema-generation.scripts.action"
+                      value="create"/>
+
+            <property name="javax.persistence.schema-generation.scripts.create-target"
+                      value="create.sql"/>
+
+            <property name="hibernate.format_sql" value="true"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>
