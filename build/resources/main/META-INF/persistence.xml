@@ -3,8 +3,9 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
-    <persistence-unit name="matricula">
+    <persistence-unit name="avanzada">
         <class>com.ing_software.entity.Administrativo</class>
+        <class>com.ing_software.entity.Contrato</class>
         <class>com.ing_software.entity.Cuenta</class>
         <class>com.ing_software.entity.Curso</class>
         <class>com.ing_software.entity.Estudiante</class>

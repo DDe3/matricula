@@ -3,7 +3,9 @@ create sequence hibernate_sequence start 1 increment 1
     create table Administrativo (
        id int4 not null,
         edad int4,
+        genero varchar(255),
         mail varchar(255),
+        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         cargo varchar(255),
@@ -35,7 +37,9 @@ create sequence hibernate_sequence start 1 increment 1
     create table Estudiante (
        id int4 not null,
         edad int4,
+        genero varchar(255),
         mail varchar(255),
+        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         estado boolean,
@@ -80,7 +84,9 @@ create sequence hibernate_sequence start 1 increment 1
     create table Profesor (
        id int4 not null,
         edad int4,
+        genero varchar(255),
         mail varchar(255),
+        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         observaciones varchar(255),
@@ -91,7 +97,9 @@ create sequence hibernate_sequence start 1 increment 1
     create table Representante (
        id int4 not null,
         edad int4,
+        genero varchar(255),
         mail varchar(255),
+        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         lugarTrabajo varchar(255),
