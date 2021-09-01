@@ -2,10 +2,8 @@ create sequence hibernate_sequence start 1 increment 1
 
     create table Administrativo (
        id int4 not null,
-        edad int4,
-        genero varchar(255),
+        cedula varchar(255),
         mail varchar(255),
-        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         cargo varchar(255),
@@ -36,15 +34,11 @@ create sequence hibernate_sequence start 1 increment 1
 
     create table Estudiante (
        id int4 not null,
-        edad int4,
-        genero varchar(255),
+        cedula varchar(255),
         mail varchar(255),
-        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         estado boolean,
-        f_inscripcion date,
-        f_nacimiento date,
         observaciones varchar(255),
         curso_id int4,
         representante_id int4,
@@ -83,10 +77,8 @@ create sequence hibernate_sequence start 1 increment 1
 
     create table Profesor (
        id int4 not null,
-        edad int4,
-        genero varchar(255),
+        cedula varchar(255),
         mail varchar(255),
-        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         observaciones varchar(255),
@@ -96,15 +88,28 @@ create sequence hibernate_sequence start 1 increment 1
 
     create table Representante (
        id int4 not null,
-        edad int4,
-        genero varchar(255),
+        cedula varchar(255),
         mail varchar(255),
-        nacionalidad varchar(255),
         nombre varchar(255),
         telefono varchar(255),
         lugarTrabajo varchar(255),
         primary key (id)
     )
+
+    alter table if exists Administrativo 
+       add constraint UK_lqjqrxmx9y66sjcpd4d7or2wb unique (cedula)
+
+    alter table if exists Cuenta 
+       add constraint UK_99rqen5hdevgtb8u1876amlnm unique (nombre)
+
+    alter table if exists Estudiante 
+       add constraint UK_bntwqhvc02ju2gtoa5yav9ud1 unique (cedula)
+
+    alter table if exists Profesor 
+       add constraint UK_24v75a1l9mijsltm2m755o9md unique (cedula)
+
+    alter table if exists Representante 
+       add constraint UK_7fb0a8v2xmu3og3xy54ijh5nf unique (cedula)
 
     alter table if exists Cuenta 
        add constraint FKn2ktsykioh4lnebnn94nm9ubi 

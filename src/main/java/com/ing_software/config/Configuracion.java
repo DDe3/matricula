@@ -35,12 +35,6 @@ public class Configuracion {
         }
     }
 
-    @Produces
-    @ApplicationScoped
-    public SeContainer container() {
-        return SeContainerInitializer.newInstance().initialize();
-    }
-
 
 
 }

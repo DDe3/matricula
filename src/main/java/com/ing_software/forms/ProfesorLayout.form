@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.ing_software.forms.ProfesorLayout">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="20" width="502" height="334"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="20f1a" class="javax.swing.JLabel" binding="bienvenidoLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

@@ -14,7 +14,7 @@ public class Materia {
     String nombre;
     String descripcion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "curso_id")
     Curso cur;
 

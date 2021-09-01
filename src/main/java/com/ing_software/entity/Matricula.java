@@ -13,7 +13,7 @@ public class Matricula {
     String ciclo;
     Date f_matricula;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "estudiante_id")
     Estudiante registro;
     Boolean estado;

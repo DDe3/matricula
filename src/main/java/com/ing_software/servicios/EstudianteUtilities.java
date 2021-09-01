@@ -18,15 +18,7 @@ public class EstudianteUtilities {
     CuentaUtilities c;
 
     public Estudiante crearEstudiante(String nombre, String telefono, Representante r, String correo, String password) {
-        Estudiante e = new Estudiante();
-        e.setNombre(nombre);
-        e.setTelefono(telefono);
-        Cuenta cuenta = c.crearCuenta(correo, password);
-        e.setCuenta(cuenta);
-        e.setMail(cuenta.getNombre());
-        e.setEstado(true);
-        e.setRepresentante(r);
-        return e;
+        return null;
     }
 
     public Resultado anularMatricula() {

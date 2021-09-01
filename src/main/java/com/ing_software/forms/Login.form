@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.ing_software.forms.Login">
+  <grid id="27dc6" binding="panelLogin" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="20" width="619" height="426"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="956b9" class="javax.swing.JTextField" binding="mail">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="5" bottom="0" right="5" weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <editable value="true"/>
+          <enabled value="true"/>
+        </properties>
+      </component>
+      <component id="a685e" class="javax.swing.JLabel" binding="correoLabel">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <labelFor value="956b9"/>
+          <text value="Correo"/>
+        </properties>
+      </component>
+      <component id="d0655" class="javax.swing.JButton" binding="ingresarButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <text value="Ingresar"/>
+        </properties>
+      </component>
+      <component id="159f3" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <text value="Password"/>
+        </properties>
+      </component>
+      <component id="4abad" class="javax.swing.JButton" binding="registrarseButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <text value="Registrarse"/>
+        </properties>
+      </component>
+      <vspacer id="e2026">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </vspacer>
+      <hspacer id="64c90">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="10" bottom="5" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <hspacer id="4d68b">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="10" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <hspacer id="ee59c">
+        <constraints>
+          <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="10" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <component id="fc15c" class="javax.swing.JLabel" binding="label_msg">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="10" bottom="0" right="0" weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <font name="JetBrains Mono" size="20" style="0"/>
+          <text value="INICIAR SESION"/>
+        </properties>
+      </component>
+      <component id="8cc25" class="javax.swing.JComboBox" binding="modo">
+        <constraints>
+          <grid row="0" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="10" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="f1c06" class="javax.swing.JPasswordField" binding="password">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+      </component>
+    </children>
+  </grid>
+</form>

@@ -3,9 +3,8 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
-    <persistence-unit name="avanzada">
+    <persistence-unit name="matricula">
         <class>com.ing_software.entity.Administrativo</class>
-        <class>com.ing_software.entity.Contrato</class>
         <class>com.ing_software.entity.Cuenta</class>
         <class>com.ing_software.entity.Curso</class>
         <class>com.ing_software.entity.Estudiante</class>
@@ -34,6 +33,8 @@
 
             <property name="javax.persistence.schema-generation.scripts.create-target"
                       value="create.sql"/>
+
+
 
             <property name="hibernate.format_sql" value="true"/>
 

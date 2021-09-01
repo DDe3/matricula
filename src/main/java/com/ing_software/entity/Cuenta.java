@@ -14,19 +14,22 @@ public class Cuenta {
     int id;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="estudiante_id")
     Estudiante owner1;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="profesor_id")
     Profesor owner2;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="administrativo_id")
     Administrativo owner3;
 
+    @Column(unique = true)
     String nombre;
+
+
     String password;
 
 }

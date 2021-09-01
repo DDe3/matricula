@@ -15,24 +15,24 @@ public class Estudiante extends Persona {
     private Boolean estado;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="representante_id")
     private Representante representante;
 
     private String observaciones;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
 
-    @OneToMany(mappedBy = "registro", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "registro", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Matricula> matriculasRegistradas;
 
-    @OneToOne(mappedBy = "owner1", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "owner1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cuenta cuenta;
 
-    @OneToMany(mappedBy = "pert", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pert", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Nota> notas;
 
     @Override
