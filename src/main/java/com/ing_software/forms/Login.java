@@ -54,7 +54,6 @@ public class Login extends JFrame {
         this.pack();
 
 
-
         ingresarButton.addActionListener(e -> {
 
             String nombre = mail.getText();
@@ -71,7 +70,7 @@ public class Login extends JFrame {
                         return null;
                     }, () -> success(""))
             );
-            result.bind(x -> goToEstudiante(), x-> JOptionPane.showMessageDialog(null, x));
+            result.bind(x -> goToEstudiante(), x -> JOptionPane.showMessageDialog(null, x));
 
 
         });
@@ -79,8 +78,6 @@ public class Login extends JFrame {
 
         registrarseButton.addActionListener(e -> goToSignIn());
     }
-
-
 
 
     private void goToEstudiante() {

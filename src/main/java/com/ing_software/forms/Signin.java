@@ -53,9 +53,6 @@ public class Signin extends JFrame {
         this.pack();
 
 
-
-
-
         registrarseButton.addActionListener(new ActionListener() {
             @SneakyThrows
             @Override
@@ -66,21 +63,22 @@ public class Signin extends JFrame {
                 validacion();
 
                 Result<String> result = Case.match(
-                        defaultCase( () -> failure("Correo no valido")),
-                        mcase( () -> nom.equals(""), ()->failure("Mail no puede ser nulo")),
-                        mcase( () -> con.equals(""), ()->failure("Ingrese todos los campos")),
-                        mcase( () -> conConf.equals(""), ()->failure("Ingrese todos los campos")),
-                        mcase( () -> con.length()<5, ()->failure("La password debe tener al menos 5 digitos")),
-                        mcase( () -> !con.equals(conConf), ()->failure("Confirmacion erronea")),
-                        mcase( () -> disponibles.contains(nom), ()-> failure("El correo ingreso ya esta registrado")),
-                        mcase( () -> emailPattern.matcher(nom).matches(), () -> success("Cuenta registrada con exito"))
+                        defaultCase(() -> failure("Correo no valido")),
+                        mcase(() -> nom.equals(""), () -> failure("Mail no puede ser nulo")),
+                        mcase(() -> con.equals(""), () -> failure("Ingrese todos los campos")),
+                        mcase(() -> conConf.equals(""), () -> failure("Ingrese todos los campos")),
+                        mcase(() -> con.length() < 5, () -> failure("La password debe tener al menos 5 digitos")),
+                        mcase(() -> !con.equals(conConf), () -> failure("Confirmacion erronea")),
+                        mcase(() -> disponibles.contains(nom), () -> failure("El correo ingreso ya esta registrado")),
+                        mcase(() -> emailPattern.matcher(nom).matches(), () -> success("Cuenta registrada con exito"))
                 );
 
-                result.bind(    x ->
+                result.bind(x ->
                 {
-                    servicio.crearCuenta(nom,con);
+                    servicio.crearCuenta(nom, con);
                     JOptionPane.showMessageDialog(null, x);
-                    goBack();}, x -> JOptionPane.showMessageDialog(null, x));
+                    goBack();
+                }, x -> JOptionPane.showMessageDialog(null, x));
 
             }
         });
@@ -102,7 +100,6 @@ public class Signin extends JFrame {
                 .map(Cuenta::getNombre)
                 .collect(Collectors.toList());
     }
-
 
 
     private void goBack() {
@@ -179,7 +176,7 @@ public class Signin extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         panelSign.add(registrarseButton, gbc);
         regresarButton = new JButton();
         regresarButton.setText("Regresar");
@@ -189,7 +186,7 @@ public class Signin extends JFrame {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         panelSign.add(regresarButton, gbc);
         final JLabel label4 = new JLabel();
         Font label4Font = this.$$$getFont$$$("JetBrains Mono", Font.PLAIN, 28, label4.getFont());
@@ -249,4 +246,5 @@ public class Signin extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return panelSign;
     }
+
 }
