@@ -30,6 +30,7 @@ public class CuentaUtilities implements ServicioCuenta {
     }
 
 
+
     public CompletableFuture<List<Cuenta>> nombresDisponibles() {
         return CompletableFuture.supplyAsync(() -> repo.findAll(), Principal.e);
     }
@@ -37,6 +38,11 @@ public class CuentaUtilities implements ServicioCuenta {
     @Override
     public Optional<Cuenta> findCuentaNombre(String nombre) {
         return repo.findPorNombre(nombre);
+    }
+
+    @Override
+    public List<Cuenta> findAll() {
+        return repo.findAll();
     }
 
 

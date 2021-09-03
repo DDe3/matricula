@@ -32,6 +32,7 @@ public class Principal {
 
     public static SeContainer se = SeContainerInitializer.newInstance().initialize();
 
+
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
 
@@ -58,12 +59,12 @@ public class Principal {
 
     }
 
-//    @TransactionScoped
-//    public void test() {
+    @TransactionScoped
+    public void test() {
 //
 //        EstudianteRepository repo1 = se.select(EstudianteRepository.class).get();
 //        ProfesorRepository repo2 = se.select(ProfesorRepository.class).get();
-//        AdministrativoRepository repo3 = se.select(AdministrativoRepository.class).get();
+
 //
 //        Cuenta prueba = new Cuenta();
 //        prueba.setNombre("lasalinasb@uce.edu.ec");
@@ -110,6 +111,14 @@ public class Principal {
 //        repo2.save(p);
 //        repo3.save(a);
 
-//    }
+//        AdministrativoRepository repo3 = se.select(AdministrativoRepository.class).get();
+//        CuentaRepository repo4 = se.select(CuentaRepository.class).get();
+//        Cuenta c = repo4.findBy(6);
+//        c.setNombre("mosquera@uce.edu.ec");
+//        c.setPassword("123456");
+//        repo4.save(c);
+
+
+    }
 
 }

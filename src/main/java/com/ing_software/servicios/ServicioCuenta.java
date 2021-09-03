@@ -18,6 +18,7 @@ public interface ServicioCuenta {
     public Optional<Cuenta> findCuenta(String nombre, String password) throws ExecutionException, InterruptedException;
     public CompletableFuture<List<Cuenta>> nombresDisponibles();
     public Optional<Cuenta> findCuentaNombre(String nombre);
+    public List<Cuenta> findAll();
 
 
 

@@ -56,21 +56,29 @@ public class Login extends JFrame {
 
         ingresarButton.addActionListener(e -> {
 
-            String nombre = mail.getText();
-            String pass = password.getText();
-            Result<String> result = Case.match(
-                    defaultCase(() -> failure("No existe una cuenta con esos datos")),
-                    mcase(() -> nombre.equals("") || pass.equals(""), () -> failure("Ingrese todos los datos")),
-                    mcase(() -> {
-                        try {
-                            return servicio.findCuenta(nombre, pass).isPresent();
-                        } catch (ExecutionException | InterruptedException executionException) {
-                            executionException.printStackTrace();
-                        }
-                        return null;
-                    }, () -> success(""))
-            );
-            result.bind(x -> goToEstudiante(), x -> JOptionPane.showMessageDialog(null, x));
+            try {
+                String nombre = mail.getText();
+                String pass = password.getText();
+                Optional<Cuenta> c = servicio.findCuenta(nombre, pass);
+                int i = modo.getSelectedIndex();
+                Result<String> result = Case.match(
+                        defaultCase(() -> failure("No existe una cuenta con esos datos")),
+                        mcase(() -> nombre.equals("") || pass.equals(""), () -> failure("Ingrese todos los datos")),
+                        mcase(() -> c.isPresent() && verificarModo(c.get()), () -> success(""))
+                );
+                result.bind(x ->
+                {
+                    if (i==0) {
+                        goToEstudiante();
+                    } else if (i==1) {
+                        goToProfesor();
+                    } else {
+                        goToAdministrador();
+                    }
+                }, x -> JOptionPane.showMessageDialog(null, x));
+            } catch (Exception ignored) {
+
+            }
 
 
         });
@@ -81,8 +89,34 @@ public class Login extends JFrame {
 
 
     private void goToEstudiante() {
-        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta");
+        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta estudiante");
 
+    }
+
+    private void goToAdministrador() {
+        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta administrador");
+    }
+
+    private void goToProfesor() {
+        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta profesor");
+    }
+
+    private boolean verificarModo(Cuenta c) {
+        if (c!=null) {
+            int i = modo.getSelectedIndex();
+            if (i==0) {
+                return c.getOwner1() != null;
+            }
+            if (i==1) {
+                return c.getOwner2() != null;
+            }
+            if (i==2) {
+                return c.getOwner3() != null;
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 
     private void goToSignIn() {
