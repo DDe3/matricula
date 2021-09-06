@@ -25,6 +25,7 @@ create sequence hibernate_sequence start 1 increment 1
        id int4 not null,
         aula varchar(255),
         ciclo varchar(255),
+        cupo int4,
         descripcion varchar(255),
         estado boolean,
         paralelo char(1),
@@ -47,14 +48,20 @@ create sequence hibernate_sequence start 1 increment 1
 
     create table Materia (
        id int4 not null,
+        codigo varchar(255),
         descripcion varchar(255),
         nombre varchar(255),
-        curso_id int4,
         primary key (id)
+    )
+
+    create table Materia_Curso (
+       materia_id int4 not null,
+        curso_id int4 not null
     )
 
     create table Matricula (
        id int4 not null,
+        aula varchar(255),
         ciclo varchar(255),
         estado boolean,
         f_matricula date,
@@ -102,8 +109,17 @@ create sequence hibernate_sequence start 1 increment 1
     alter table if exists Cuenta 
        add constraint UK_99rqen5hdevgtb8u1876amlnm unique (nombre)
 
+    alter table if exists Curso 
+       add constraint UK_c2kd6498e0460efltk9y17kjo unique (aula)
+
     alter table if exists Estudiante 
        add constraint UK_bntwqhvc02ju2gtoa5yav9ud1 unique (cedula)
+
+    alter table if exists Materia 
+       add constraint UK_q6xg9kcies9kgfoa02ktoqnrc unique (codigo)
+
+    alter table if exists Matricula 
+       add constraint UK_d4iy4ahio73k2vxhn047recj8 unique (aula)
 
     alter table if exists Profesor 
        add constraint UK_24v75a1l9mijsltm2m755o9md unique (cedula)
@@ -141,10 +157,15 @@ create sequence hibernate_sequence start 1 increment 1
        foreign key (representante_id) 
        references Representante
 
-    alter table if exists Materia 
-       add constraint FKtki0lpts2vtpm164duw85pugj 
+    alter table if exists Materia_Curso 
+       add constraint FKejwi8aeso3djrup5i6b2wm8be 
        foreign key (curso_id) 
        references Curso
+
+    alter table if exists Materia_Curso 
+       add constraint FKt9cocgck5g20lkswhy81grg38 
+       foreign key (materia_id) 
+       references Materia
 
     alter table if exists Matricula 
        add constraint FKsly6if0ddpx3n2ober3eb05vn 

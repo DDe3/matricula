@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,8 +27,8 @@ public class Estudiante extends Persona {
     private Curso curso;
 
 
-    @OneToMany(mappedBy = "registro", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Matricula> matriculasRegistradas;
+    @OneToMany(mappedBy = "registro", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
+    private List<Matricula> matriculasRegistradas = new ArrayList<>();
 
     @OneToOne(mappedBy = "owner1", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cuenta cuenta;
@@ -40,9 +41,23 @@ public class Estudiante extends Persona {
         return this.toString();
     }
     public void addMatricula(Matricula m) {
-        this.matriculasRegistradas.add(0,m);
+        boolean aux=true;
+        for (Matricula mat :matriculasRegistradas) {
+            if (mat.getAula().equals(m.getAula())) {
+                aux = false;
+                break;
+            }
+        }
+        if (aux) {
+            this.matriculasRegistradas.add(0,m);
+        }
     }
 
 
-
+    @Override
+    public String toString() {
+        return
+                "CDI='" + cedula + '\'' +
+                ", NOMBRE :'" + nombre;
+    }
 }

@@ -7,7 +7,6 @@ import org.apache.deltaspike.data.api.Repository;
 
 import javax.enterprise.context.RequestScoped;
 
-@RequestScoped
 @Repository
 public interface AdministrativoRepository extends EntityRepository<Administrativo, Integer> {
 }

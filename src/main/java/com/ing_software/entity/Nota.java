@@ -10,7 +10,7 @@ public class Nota {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="materia_id")
     Materia asignatura;
 

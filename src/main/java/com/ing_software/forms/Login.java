@@ -4,23 +4,17 @@ import com.ing_software.Principal;
 import com.ing_software.abstraccion.Case;
 import com.ing_software.abstraccion.Result;
 import com.ing_software.entity.Cuenta;
-import com.ing_software.repo.CuentaRepository;
 import com.ing_software.servicios.ServicioCuenta;
-import lombok.SneakyThrows;
 
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 
 import static com.ing_software.abstraccion.Case.defaultCase;
 import static com.ing_software.abstraccion.Case.mcase;
@@ -32,6 +26,7 @@ public class Login extends JFrame {
 
 
     ServicioCuenta servicio = Principal.se.select(ServicioCuenta.class).get();
+    final Pattern emailPattern = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
 
 
     private JLabel label_msg;
@@ -58,24 +53,31 @@ public class Login extends JFrame {
 
             try {
                 String nombre = mail.getText();
-                String pass = password.getText();
-                Optional<Cuenta> c = servicio.findCuenta(nombre, pass);
-                int i = modo.getSelectedIndex();
-                Result<String> result = Case.match(
-                        defaultCase(() -> failure("No existe una cuenta con esos datos")),
-                        mcase(() -> nombre.equals("") || pass.equals(""), () -> failure("Ingrese todos los datos")),
-                        mcase(() -> c.isPresent() && verificarModo(c.get()), () -> success(""))
-                );
-                result.bind(x ->
-                {
-                    if (i==0) {
-                        goToEstudiante();
-                    } else if (i==1) {
-                        goToProfesor();
-                    } else {
-                        goToAdministrador();
-                    }
-                }, x -> JOptionPane.showMessageDialog(null, x));
+                if (!emailPattern.matcher(nombre).matches()) {
+                    JOptionPane.showMessageDialog(null, "Ingrese un correo válido");
+                    mail.setText("");
+                    password.setText("");
+                } else {
+                    String pass = password.getText();
+                    Optional<Cuenta> c = servicio.findCuenta(nombre, pass);
+                    int i = modo.getSelectedIndex();
+                    Result<String> result = Case.match(
+                            defaultCase(() -> failure("No existe una cuenta con esos datos")),
+                            mcase(() -> nombre.equals("") || pass.equals(""), () -> failure("Ingrese todos los datos")),
+                            mcase(() -> c.isPresent() && verificarModo(c.get()), () -> success(""))
+                    );
+                    result.bind(x ->
+                    {
+                        if (i == 0) {
+                            goToEstudiante();
+                        } else if (i == 1) {
+                            goToProfesor();
+                        } else {
+                            goToAdministrador(c.get());
+                        }
+                    }, x -> JOptionPane.showMessageDialog(null, x));
+                }
+
             } catch (Exception ignored) {
 
             }
@@ -90,11 +92,12 @@ public class Login extends JFrame {
 
     private void goToEstudiante() {
         JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta estudiante");
-
     }
 
-    private void goToAdministrador() {
-        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta administrador");
+    private void goToAdministrador(Cuenta c) {
+        JFrame admin = new Administrador("Sistema de Información - Administrador", c);
+        admin.setVisible(true);
+        this.dispose();
     }
 
     private void goToProfesor() {
@@ -102,15 +105,15 @@ public class Login extends JFrame {
     }
 
     private boolean verificarModo(Cuenta c) {
-        if (c!=null) {
+        if (c != null) {
             int i = modo.getSelectedIndex();
-            if (i==0) {
+            if (i == 0) {
                 return c.getOwner1() != null;
             }
-            if (i==1) {
+            if (i == 1) {
                 return c.getOwner2() != null;
             }
-            if (i==2) {
+            if (i == 2) {
                 return c.getOwner3() != null;
             }
         } else {

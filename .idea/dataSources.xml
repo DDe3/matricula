@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://hattie.db.elephantsql.com:5432/ezstgicp</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="rzxpjavq@chunee.db.elephantsql.com" uuid="a99cf778-bb02-4240-b896-c0497b6c04c5">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://chunee.db.elephantsql.com:5432/rzxpjavq</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

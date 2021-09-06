@@ -3,6 +3,7 @@ package com.ing_software.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,21 +13,36 @@ public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+
+    @Column(unique = true)
     String aula;
+
     Character paralelo;
     String descripcion;
     String ciclo;
     Boolean estado;
 
+    Integer cupo;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
-    List<Estudiante> estudiantes;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Estudiante> estudiantes = new ArrayList<>();;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profesor_id")
     Profesor encargado;
 
-    @OneToMany(mappedBy = "cur", cascade = CascadeType.ALL)
-    private List<Materia> materias;
+    @ManyToMany(mappedBy = "cur", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Materia> materias = new ArrayList<>();
+
+
+    public void addMateria(List<Materia> m) {
+        List<Materia> aux = new ArrayList<>(m);
+        for (int i = 0; i < aux.size(); i++) {
+            if (!materias.contains(aux.get(i))) {
+                materias.add(aux.get(i));
+            }
+        }
+    }
 
 }

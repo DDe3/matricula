@@ -20,13 +20,13 @@
                       value="org.postgresql.Driver" />
 
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:postgresql://hattie.db.elephantsql.com:5432/ezstgicp" />
+                      value="jdbc:postgresql://chunee.db.elephantsql.com:5432/rzxpjavq" />
 
             <property name="javax.persistence.jdbc.user"
-                      value="ezstgicp" />
+                      value="rzxpjavq" />
 
             <property name="javax.persistence.jdbc.password"
-                      value="ZR8hj3Xa7tgNemI9z3uGnM_GiV6nksAN" />
+                      value="C2tTiUBdH1lwfvp3uAA8tS5avzX3DpRC" />
 
             <property name="javax.persistence.schema-generation.scripts.action"
                       value="create"/>

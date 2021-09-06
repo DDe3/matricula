@@ -1,13 +1,28 @@
 package com.ing_software.servicios;
 
 import com.ing_software.Resultado;
-import com.ing_software.entity.Estudiante;
-import com.ing_software.entity.Materia;
-import com.ing_software.entity.Nota;
+import com.ing_software.entity.*;
+import com.ing_software.repo.ProfesorRepository;
+import org.apache.deltaspike.jpa.api.transaction.TransactionScoped;
+
+import javax.inject.Inject;
+import java.lang.management.OperatingSystemMXBean;
+import java.util.List;
+import java.util.Optional;
 
 public class ProfesorUtilities {
 
-    public static Resultado subirNota(Estudiante est, Nota nota, Materia m) {
-        return null;
+    @Inject
+    ProfesorRepository repo;
+
+    public void subirNota(Estudiante est, Nota nota, Materia m) {
+
     }
+
+    public List<Profesor> findAll() {
+        return repo.findAll();
+    }
+
+
+
 }
