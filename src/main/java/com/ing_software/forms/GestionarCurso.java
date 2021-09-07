@@ -12,6 +12,7 @@ import lombok.SneakyThrows;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
@@ -44,7 +45,6 @@ public class GestionarCurso extends JFrame {
 
     private JTabbedPane cursoPanel;
     private JPanel gestionCursoPanel;
-    private JTabbedPane tabbedPane2;
     private JTextField aula_jtext;
     private JList estudiantesRegistradosList;
     private JList materiasRegistradasList;
@@ -54,8 +54,6 @@ public class GestionarCurso extends JFrame {
     private JButton addMateriaButton;
     private JButton removeMateriaButton;
     private JButton crearButton;
-    private JButton button6;
-    private JButton button7;
     private JButton buscarButton;
     private JButton salirButton;
     private JButton modificarButton;
@@ -87,7 +85,6 @@ public class GestionarCurso extends JFrame {
     CompletableFuture<List<Profesor>> listProfesorAux;
 
     CompletableFuture<List<Materia>> listMateriaAux;
-
 
 
     public GestionarCurso(String title) throws HeadlessException {
@@ -139,8 +136,8 @@ public class GestionarCurso extends JFrame {
                         x ->
                         {
                             Estudiante estudiante = op.get();
-                            DefaultListModel<String> model = (DefaultListModel<String>) estudiantesAddList.getModel();
-                            model.addElement(estudiante.getNombre() + " | " + estudiante.getCedula());
+                            DefaultListModel<Estudiante> model = (DefaultListModel<Estudiante>) estudiantesAddList.getModel();
+                            model.addElement(estudiante);
                         }
 
                         ,
@@ -216,19 +213,19 @@ public class GestionarCurso extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //try {
-                    if (!estudiantesAddList.isSelectionEmpty()) {
-                        listarAux(false);
-                        Estudiante estudiante = (Estudiante) estudiantesAddList.getSelectedValue();
-                        servicioEstudiante.removeMatricula(estudiante);
-                        estudiante.setCurso(null);
-                        int index = estudiantesAddList.getSelectedIndex();
-                        DefaultListModel<Estudiante> modelo = (DefaultListModel<Estudiante>) estudiantesAddList.getModel();
-                        modelo.remove(index);
-                        DefaultListModel<Estudiante> model = (DefaultListModel<Estudiante>) estudiantesRegistradosList.getModel();
-                        model.addElement(estudiante);
-                        listarAux(true);
+                if (!estudiantesAddList.isSelectionEmpty()) {
+                    listarAux(false);
+                    Estudiante estudiante = (Estudiante) estudiantesAddList.getSelectedValue();
+                    servicioEstudiante.removeMatricula(estudiante);
+                    estudiante.setCurso(null);
+                    int index = estudiantesAddList.getSelectedIndex();
+                    DefaultListModel<Estudiante> modelo = (DefaultListModel<Estudiante>) estudiantesAddList.getModel();
+                    modelo.remove(index);
+                    DefaultListModel<Estudiante> model = (DefaultListModel<Estudiante>) estudiantesRegistradosList.getModel();
+                    model.addElement(estudiante);
+                    listarAux(true);
 
-                    }
+                }
 //                } catch (Exception ex){
 //                    JOptionPane.showMessageDialog(null, "No se pudo modificar al estudiante\nError: " + ex);
 //                }
@@ -258,7 +255,7 @@ public class GestionarCurso extends JFrame {
                     String aula = aula_jtext.getText();
                     Materia materia = (Materia) materiasAddList.getSelectedValue();
                     Curso curso = servicioCurso.findByAula(aula).get();
-                    servicioCurso.removeMaterias(curso,materia);
+                    servicioCurso.removeMaterias(curso, materia);
                     int index = materiasAddList.getSelectedIndex();
                     DefaultListModel<Materia> modelo = (DefaultListModel<Materia>) materiasAddList.getModel();
                     modelo.remove(index);
@@ -292,7 +289,7 @@ public class GestionarCurso extends JFrame {
                     Profesor profesor = (Profesor) profesoresAddList.getSelectedValue();
                     Curso curso = servicioCurso.findByAula(aula).get();
                     int index = profesoresAddList.getSelectedIndex();
-                    servicioCurso.removeProfesor(curso,profesor);
+                    servicioCurso.removeProfesor(curso, profesor);
                     DefaultListModel<Profesor> modelo = (DefaultListModel<Profesor>) profesoresAddList.getModel();
                     modelo.remove(index);
                     DefaultListModel<Profesor> model = (DefaultListModel<Profesor>) profesoresRegistradosList.getModel();
@@ -426,7 +423,6 @@ public class GestionarCurso extends JFrame {
                                 JOptionPane.INFORMATION_MESSAGE);
 
 
-
                     }, x ->
                             JOptionPane.showMessageDialog(null,
                                     "Error: " + x,
@@ -453,6 +449,12 @@ public class GestionarCurso extends JFrame {
                 habilitarCampos(true);
                 habilitarBotones(true);
 
+
+            }
+        });
+        registrarCursoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 String aula = aula_jtext.getText();
                 String ciclo = (String) cicloBox.getSelectedItem();
                 String paralelo = paralelo_jtext.getText();
@@ -483,24 +485,35 @@ public class GestionarCurso extends JFrame {
                         mcase(() -> cupos < 15 || cupos > 60, () -> failure("Rango de cupos validos: [15-60]")),
                         mcase(() -> estudiantes.size() > cupos, () -> failure("Existen más alumnos que cupos")),
                         mcase(() -> profesors.size() > 1, () -> failure("Un curso solo puede tener un profesor")),
-                        mcase(() -> materias.size() > 7 || materias.size() < 1, () -> failure("Rango de materias valido: [1-7]")));
+                        mcase(() -> materias.size() > 7, () -> failure("Rango de materias valido: [1-7]")));
 
 
+                result.bind(x -> {
+                            System.out.println("Profesor: " + profesors);
+                            System.out.println("Materias: " + materias);
+                            System.out.println("Estudiantes : " + estudiantes);
+                            servicioCurso.crearCursoAndSave(aula, paralelo.charAt(0), ciclo, profesors.isEmpty() ? null : profesors.get(0), materias, estudiantes, cupos);
+                            JOptionPane.showMessageDialog(null, "Curso creado con exito");
+                            servicioEstudiante.clear();
+                            clearText();
+                            setup();
 
-                result.bind( x-> {
-
-
-
-                        }, x -> {
-
-                        }
+                        }, x -> JOptionPane.showMessageDialog(null, "No se pudo crear el curso\nError: " + x)
                 );
-
-
-
+                servicioEstudiante.clear();
 
             }
         });
+        salirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerrar();
+            }
+        });
+    }
+
+    private void cerrar() {
+        this.dispose();
     }
 
     private void findFutureEstudiante() {
@@ -651,112 +664,163 @@ public class GestionarCurso extends JFrame {
      */
     private void $$$setupUI$$$() {
         gestionCursoPanel = new JPanel();
-        gestionCursoPanel.setLayout(new GridLayoutManager(4, 4, new Insets(0, 0, 0, 0), -1, -1));
+        gestionCursoPanel.setLayout(new GridLayoutManager(4, 7, new Insets(5, 5, 5, 5), -1, -1));
+        gestionCursoPanel.setBackground(new Color(-1973802));
+        gestionCursoPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-1249292)));
         cursoPanel = new JTabbedPane();
-        gestionCursoPanel.add(cursoPanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        cursoPanel.setBackground(new Color(-7100224));
+        cursoPanel.setForeground(new Color(-16777216));
+        gestionCursoPanel.add(cursoPanel, new GridConstraints(1, 0, 1, 7, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 1, false));
+        cursoPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         panelGestion = new JPanel();
-        panelGestion.setLayout(new GridLayoutManager(13, 11, new Insets(0, 0, 0, 0), -1, -1));
+        panelGestion.setLayout(new GridLayoutManager(17, 10, new Insets(5, 5, 5, 5), -1, -1));
+        panelGestion.setBackground(new Color(-7100224));
         cursoPanel.addTab("Cursos", panelGestion);
+        panelGestion.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         aula_jtext = new JTextField();
+        aula_jtext.setBackground(new Color(-6255970));
         panelGestion.add(aula_jtext, new GridConstraints(0, 1, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
         label1.setText("Aula");
-        panelGestion.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(74, 16), null, 0, false));
         final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
         label2.setText("Materias");
-        panelGestion.add(label2, new GridConstraints(6, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label2, new GridConstraints(7, 0, 4, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(74, 16), null, 0, false));
         final JLabel label3 = new JLabel();
+        Font label3Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label3.getFont());
+        if (label3Font != null) label3.setFont(label3Font);
         label3.setText("Ciclo");
-        panelGestion.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(74, 16), null, 0, false));
         final JLabel label4 = new JLabel();
+        Font label4Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label4.getFont());
+        if (label4Font != null) label4.setFont(label4Font);
         label4.setText("Estudiantes");
-        panelGestion.add(label4, new GridConstraints(2, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label4, new GridConstraints(2, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(74, 16), null, 0, false));
         listarMateriasButton = new JButton();
+        listarMateriasButton.setBackground(new Color(-2639983));
+        Font listarMateriasButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, listarMateriasButton.getFont());
+        if (listarMateriasButtonFont != null) listarMateriasButton.setFont(listarMateriasButtonFont);
         listarMateriasButton.setText("Listar Materias");
-        panelGestion.add(listarMateriasButton, new GridConstraints(8, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(71, 30), null, 0, false));
+        panelGestion.add(listarMateriasButton, new GridConstraints(11, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(71, 30), null, 0, false));
         listarEstudianteButton = new JButton();
+        listarEstudianteButton.setBackground(new Color(-2639983));
+        Font listarEstudianteButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, listarEstudianteButton.getFont());
+        if (listarEstudianteButtonFont != null) listarEstudianteButton.setFont(listarEstudianteButtonFont);
         listarEstudianteButton.setText("Listar Estudiantes");
-        panelGestion.add(listarEstudianteButton, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(listarEstudianteButton, new GridConstraints(5, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         est_jtext = new JTextField();
-        panelGestion.add(est_jtext, new GridConstraints(4, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        est_jtext.setBackground(new Color(-6255970));
+        panelGestion.add(est_jtext, new GridConstraints(5, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label5.getFont());
+        if (label5Font != null) label5.setFont(label5Font);
         label5.setText("CDI:");
-        panelGestion.add(label5, new GridConstraints(4, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(71, 16), null, 0, false));
+        panelGestion.add(label5, new GridConstraints(5, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(71, 16), null, 0, false));
         addPorCDIButton = new JButton();
+        addPorCDIButton.setBackground(new Color(-2639983));
+        Font addPorCDIButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, addPorCDIButton.getFont());
+        if (addPorCDIButtonFont != null) addPorCDIButton.setFont(addPorCDIButtonFont);
         addPorCDIButton.setText("Add");
-        panelGestion.add(addPorCDIButton, new GridConstraints(4, 9, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(addPorCDIButton, new GridConstraints(5, 9, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         addEstudianteButton = new JButton();
+        addEstudianteButton.setBackground(new Color(-2639983));
+        Font addEstudianteButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, addEstudianteButton.getFont());
+        if (addEstudianteButtonFont != null) addEstudianteButton.setFont(addEstudianteButtonFont);
         addEstudianteButton.setText(">>");
-        panelGestion.add(addEstudianteButton, new GridConstraints(2, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(addEstudianteButton, new GridConstraints(2, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         removeEstudianteButton = new JButton();
+        removeEstudianteButton.setBackground(new Color(-2639983));
+        Font removeEstudianteButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, removeEstudianteButton.getFont());
+        if (removeEstudianteButtonFont != null) removeEstudianteButton.setFont(removeEstudianteButtonFont);
         removeEstudianteButton.setText("<<");
-        panelGestion.add(removeEstudianteButton, new GridConstraints(3, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(removeEstudianteButton, new GridConstraints(3, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         addMateriaButton = new JButton();
+        addMateriaButton.setBackground(new Color(-2639983));
+        Font addMateriaButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, addMateriaButton.getFont());
+        if (addMateriaButtonFont != null) addMateriaButton.setFont(addMateriaButtonFont);
         addMateriaButton.setText(">>");
-        panelGestion.add(addMateriaButton, new GridConstraints(6, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(addMateriaButton, new GridConstraints(7, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setText("Estudiantes de este Curso");
         panelGestion.add(label6, new GridConstraints(1, 8, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label7 = new JLabel();
         label7.setText("Materias de este Curso");
-        panelGestion.add(label7, new GridConstraints(5, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label7, new GridConstraints(6, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label8 = new JLabel();
         label8.setText("Profesores");
-        panelGestion.add(label8, new GridConstraints(10, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label8, new GridConstraints(13, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(74, 16), null, 0, false));
         addProfesorButton = new JButton();
+        addProfesorButton.setBackground(new Color(-2639983));
+        Font addProfesorButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, addProfesorButton.getFont());
+        if (addProfesorButtonFont != null) addProfesorButton.setFont(addProfesorButtonFont);
         addProfesorButton.setText(">>");
-        panelGestion.add(addProfesorButton, new GridConstraints(10, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(addProfesorButton, new GridConstraints(13, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         removeProfesorButton = new JButton();
+        removeProfesorButton.setBackground(new Color(-2639983));
+        Font removeProfesorButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, removeProfesorButton.getFont());
+        if (removeProfesorButtonFont != null) removeProfesorButton.setFont(removeProfesorButtonFont);
         removeProfesorButton.setText("<<");
-        panelGestion.add(removeProfesorButton, new GridConstraints(11, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(removeProfesorButton, new GridConstraints(14, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label9 = new JLabel();
         label9.setText("Profesor de este Curso");
-        panelGestion.add(label9, new GridConstraints(9, 8, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(label9, new GridConstraints(12, 8, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         listarProfesoresButton = new JButton();
+        listarProfesoresButton.setBackground(new Color(-2639983));
+        Font listarProfesoresButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, listarProfesoresButton.getFont());
+        if (listarProfesoresButtonFont != null) listarProfesoresButton.setFont(listarProfesoresButtonFont);
         listarProfesoresButton.setText("Listar Profesores");
-        panelGestion.add(listarProfesoresButton, new GridConstraints(12, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        registrarCursoButton = new JButton();
-        registrarCursoButton.setText("Registrar Curso");
-        panelGestion.add(registrarCursoButton, new GridConstraints(12, 8, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(listarProfesoresButton, new GridConstraints(16, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         materiasScrollPane = new JScrollPane();
-        panelGestion.add(materiasScrollPane, new GridConstraints(6, 1, 2, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelGestion.add(materiasScrollPane, new GridConstraints(7, 1, 3, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         materiasRegistradasList = new JList();
+        materiasRegistradasList.setBackground(new Color(-6255970));
         final DefaultListModel defaultListModel1 = new DefaultListModel();
         materiasRegistradasList.setModel(defaultListModel1);
         materiasScrollPane.setViewportView(materiasRegistradasList);
         estudianteScrollPane = new JScrollPane();
-        panelGestion.add(estudianteScrollPane, new GridConstraints(2, 1, 2, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        estudianteScrollPane.setBackground(new Color(-6255970));
+        panelGestion.add(estudianteScrollPane, new GridConstraints(2, 1, 3, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         estudiantesRegistradosList = new JList();
+        estudiantesRegistradosList.setBackground(new Color(-6255970));
         final DefaultListModel defaultListModel2 = new DefaultListModel();
         estudiantesRegistradosList.setModel(defaultListModel2);
         estudianteScrollPane.setViewportView(estudiantesRegistradosList);
         profesorScrollPane = new JScrollPane();
-        panelGestion.add(profesorScrollPane, new GridConstraints(10, 1, 2, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panelGestion.add(profesorScrollPane, new GridConstraints(13, 1, 3, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         profesoresRegistradosList = new JList();
+        profesoresRegistradosList.setBackground(new Color(-6255970));
         final DefaultListModel defaultListModel3 = new DefaultListModel();
         profesoresRegistradosList.setModel(defaultListModel3);
         profesorScrollPane.setViewportView(profesoresRegistradosList);
         materiasAddScrollPane = new JScrollPane();
-        panelGestion.add(materiasAddScrollPane, new GridConstraints(6, 8, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panelGestion.add(materiasAddScrollPane, new GridConstraints(7, 8, 4, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         materiasAddList = new JList();
+        materiasAddList.setBackground(new Color(-6255970));
         materiasAddScrollPane.setViewportView(materiasAddList);
         estudiantesAddScrollPane = new JScrollPane();
         panelGestion.add(estudiantesAddScrollPane, new GridConstraints(2, 8, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         estudiantesAddList = new JList();
+        estudiantesAddList.setBackground(new Color(-6255970));
         estudiantesAddScrollPane.setViewportView(estudiantesAddList);
         profesorAddScrollPane = new JScrollPane();
-        panelGestion.add(profesorAddScrollPane, new GridConstraints(10, 8, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panelGestion.add(profesorAddScrollPane, new GridConstraints(13, 8, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         profesoresAddList = new JList();
+        profesoresAddList.setBackground(new Color(-6255970));
         profesorAddScrollPane.setViewportView(profesoresAddList);
-        removeMateriaButton = new JButton();
-        removeMateriaButton.setText("<<");
-        panelGestion.add(removeMateriaButton, new GridConstraints(7, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label10 = new JLabel();
+        Font label10Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label10.getFont());
+        if (label10Font != null) label10.setFont(label10Font);
         label10.setText("Paralelo");
         panelGestion.add(label10, new GridConstraints(1, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         paralelo_jtext = new JTextField();
+        paralelo_jtext.setBackground(new Color(-6255970));
         panelGestion.add(paralelo_jtext, new GridConstraints(1, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         cicloBox = new JComboBox();
+        cicloBox.setBackground(new Color(-6255970));
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         defaultComboBoxModel1.addElement("Primero");
         defaultComboBoxModel1.addElement("Segundo");
@@ -768,41 +832,68 @@ public class GestionarCurso extends JFrame {
         cicloBox.setModel(defaultComboBoxModel1);
         panelGestion.add(cicloBox, new GridConstraints(1, 1, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label11 = new JLabel();
+        Font label11Font = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 12, label11.getFont());
+        if (label11Font != null) label11.setFont(label11Font);
         label11.setText("Cupos");
         panelGestion.add(label11, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cupoSpinner = new JSpinner();
+        cupoSpinner.setBackground(new Color(-6255970));
+        Font cupoSpinnerFont = this.$$$getFont$$$(null, -1, -1, cupoSpinner.getFont());
+        if (cupoSpinnerFont != null) cupoSpinner.setFont(cupoSpinnerFont);
         panelGestion.add(cupoSpinner, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        tabbedPane2 = new JTabbedPane();
-        gestionCursoPanel.add(tabbedPane2, new GridConstraints(1, 2, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        tabbedPane2.addTab("Materia", panel1);
+        removeMateriaButton = new JButton();
+        removeMateriaButton.setBackground(new Color(-2639983));
+        Font removeMateriaButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 16, removeMateriaButton.getFont());
+        if (removeMateriaButtonFont != null) removeMateriaButton.setFont(removeMateriaButtonFont);
+        removeMateriaButton.setText("<<");
+        panelGestion.add(removeMateriaButton, new GridConstraints(8, 7, 3, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(78, 48), null, 0, false));
         crearButton = new JButton();
+        crearButton.setBackground(new Color(-2639983));
+        Font crearButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, crearButton.getFont());
+        if (crearButtonFont != null) crearButton.setFont(crearButtonFont);
+        crearButton.setForeground(new Color(-6255970));
         crearButton.setText("Crear");
         gestionCursoPanel.add(crearButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button6 = new JButton();
-        button6.setText("Button");
-        gestionCursoPanel.add(button6, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button7 = new JButton();
-        button7.setText("Button");
-        gestionCursoPanel.add(button7, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        buscarButton = new JButton();
-        buscarButton.setText("Buscar");
-        gestionCursoPanel.add(buscarButton, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label12 = new JLabel();
-        Font label12Font = this.$$$getFont$$$("JetBrains Mono", Font.PLAIN, 16, label12.getFont());
+        Font label12Font = this.$$$getFont$$$("JetBrains Mono", Font.PLAIN, 22, label12.getFont());
         if (label12Font != null) label12.setFont(label12Font);
         label12.setText("Gestionar Curso y Materia");
-        gestionCursoPanel.add(label12, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        salirButton = new JButton();
-        salirButton.setText("Salir");
-        gestionCursoPanel.add(salirButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gestionCursoPanel.add(label12, new GridConstraints(0, 0, 1, 7, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         modificarButton = new JButton();
+        modificarButton.setBackground(new Color(-2639983));
+        Font modificarButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, modificarButton.getFont());
+        if (modificarButtonFont != null) modificarButton.setFont(modificarButtonFont);
+        modificarButton.setForeground(new Color(-6255970));
         modificarButton.setText("Modificar");
         gestionCursoPanel.add(modificarButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        registrarCursoButton = new JButton();
+        registrarCursoButton.setBackground(new Color(-2639983));
+        Font registrarCursoButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, registrarCursoButton.getFont());
+        if (registrarCursoButtonFont != null) registrarCursoButton.setFont(registrarCursoButtonFont);
+        registrarCursoButton.setForeground(new Color(-6255970));
+        registrarCursoButton.setText("Registrar Curso");
+        gestionCursoPanel.add(registrarCursoButton, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buscarButton = new JButton();
+        buscarButton.setBackground(new Color(-2639983));
+        Font buscarButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, buscarButton.getFont());
+        if (buscarButtonFont != null) buscarButton.setFont(buscarButtonFont);
+        buscarButton.setForeground(new Color(-6255970));
+        buscarButton.setText("Buscar");
+        gestionCursoPanel.add(buscarButton, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        salirButton = new JButton();
+        salirButton.setBackground(new Color(-2639983));
+        Font salirButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, salirButton.getFont());
+        if (salirButtonFont != null) salirButton.setFont(salirButtonFont);
+        salirButton.setForeground(new Color(-6255970));
+        salirButton.setText("Salir");
+        gestionCursoPanel.add(salirButton, new GridConstraints(3, 3, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cancelarButton = new JButton();
+        cancelarButton.setBackground(new Color(-2639983));
+        Font cancelarButtonFont = this.$$$getFont$$$("JetBrains Mono", Font.BOLD, 14, cancelarButton.getFont());
+        if (cancelarButtonFont != null) cancelarButton.setFont(cancelarButtonFont);
+        cancelarButton.setForeground(new Color(-6255970));
         cancelarButton.setText("Cancelar");
-        gestionCursoPanel.add(cancelarButton, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gestionCursoPanel.add(cancelarButton, new GridConstraints(2, 3, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

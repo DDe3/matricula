@@ -22,4 +22,11 @@ public class Administrativo extends Persona{
     public String reporte() {
         return this.toString();
     }
+
+
+    @Override
+    public String toString() {
+        return "CDI: " + cedula +
+                ", Nombre: " + nombre;
+    }
 }

@@ -1,9 +1,9 @@
 com/ing_software/utils/Patterns.java
  com.ing_software.utils.Patterns
-com/ing_software/entity/Materia.java
- com.ing_software.entity.Materia
-com/ing_software/entity/Matricula.java
- com.ing_software.entity.Matricula
+com/ing_software/repo/EstudianteRepository.java
+ com.ing_software.repo.EstudianteRepository
+com/ing_software/repo/CursoRepository.java
+ com.ing_software.repo.CursoRepository
 com/ing_software/repo/CuentaRepository.java
  com.ing_software.repo.CuentaRepository
 com/ing_software/Resultado.java
@@ -12,43 +12,67 @@ com/ing_software/abstraccion/Failure.java
  com.ing_software.abstraccion.Failure
 com/ing_software/repo/AdministrativoRepository.java
  com.ing_software.repo.AdministrativoRepository
-com/ing_software/servicios/MatriculaUtilities.java
- com.ing_software.servicios.MatriculaUtilities
-com/ing_software/entity/Cuenta.java
- com.ing_software.entity.Cuenta
-com/ing_software/servicios/ServicioCuenta.java
- com.ing_software.servicios.ServicioCuenta
+com/ing_software/config/Configuracion.java
+ com.ing_software.config.Configuracion
+com/ing_software/entity/Persona.java
+ com.ing_software.entity.Persona
+com/ing_software/abstraccion/Effect.java
+ com.ing_software.abstraccion.Effect
+com/ing_software/repo/RepresentanteRepository.java
+ com.ing_software.repo.RepresentanteRepository
 com/ing_software/forms/ProfesorLayout.java
  com.ing_software.forms.ProfesorLayout
 com/ing_software/repo/NotaRepository.java
  com.ing_software.repo.NotaRepository
-com/ing_software/servicios/EstudianteUtilities.java
- com.ing_software.servicios.EstudianteUtilities
+com/ing_software/repo/MateriaRepository.java
+ com.ing_software.repo.MateriaRepository
 com/ing_software/Informacion.java
  com.ing_software.Informacion
 com/ing_software/abstraccion/Case.java
  com.ing_software.abstraccion.Case
  com.ing_software.abstraccion.DefaultCase
-com/ing_software/Principal.java
- com.ing_software.Principal
+com/ing_software/repo/ProfesorRepository.java
+ com.ing_software.repo.ProfesorRepository
 com/ing_software/repo/MatriculaRepository.java
  com.ing_software.repo.MatriculaRepository
-com/ing_software/forms/Login.java
- com.ing_software.forms.Login
-com/ing_software/forms/Signin.java
- com.ing_software.forms.Signin
- com.ing_software.forms.Signin$1
- com.ing_software.forms.Signin$2
-com/ing_software/abstraccion/Result.java
- com.ing_software.abstraccion.Result
-com/ing_software/entity/Representante.java
- com.ing_software.entity.Representante
 com/ing_software/servicios/MateriaUtilities.java
  com.ing_software.servicios.MateriaUtilities
 com/ing_software/abstraccion/Success.java
  com.ing_software.abstraccion.Success
-com/ing_software/repo/MateriaRepository.java
- com.ing_software.repo.MateriaRepository
+com/ing_software/abstraccion/Result.java
+ com.ing_software.abstraccion.Result
+com/ing_software/forms/Administrador.java
+ com.ing_software.forms.Administrador
+ com.ing_software.forms.Administrador$1
+ com.ing_software.forms.Administrador$2
+ com.ing_software.forms.Administrador$3
+ com.ing_software.forms.Administrador$4
+com/ing_software/entity/Materia.java
+ com.ing_software.entity.Materia
+com/ing_software/entity/Representante.java
+ com.ing_software.entity.Representante
+com/ing_software/entity/Matricula.java
+ com.ing_software.entity.Matricula
+com/ing_software/servicios/MatriculaUtilities.java
+ com.ing_software.servicios.MatriculaUtilities
+com/ing_software/entity/Cuenta.java
+ com.ing_software.entity.Cuenta
+com/ing_software/entity/Curso.java
+ com.ing_software.entity.Curso
+com/ing_software/servicios/AdministrativoUtilities.java
+ com.ing_software.servicios.AdministrativoUtilities
+com/ing_software/servicios/ServicioCuenta.java
+ com.ing_software.servicios.ServicioCuenta
+com/ing_software/entity/Administrativo.java
+ com.ing_software.entity.Administrativo
+com/ing_software/entity/Nota.java
+ com.ing_software.entity.Nota
+com/ing_software/entity/Profesor.java
+ com.ing_software.entity.Profesor
+com/ing_software/entity/Estudiante.java
+ com.ing_software.entity.Estudiante
+com/ing_software/servicios/ProfesorUtilities.java
+ com.ing_software.servicios.ProfesorUtilities
 com/ing_software/forms/GestionarAlumno.java
  com.ing_software.forms.GestionarAlumno
  com.ing_software.forms.GestionarAlumno$1
@@ -58,32 +82,43 @@ com/ing_software/forms/GestionarAlumno.java
  com.ing_software.forms.GestionarAlumno$5
  com.ing_software.forms.GestionarAlumno$6
  com.ing_software.forms.GestionarAlumno$7
-com/ing_software/entity/Curso.java
- com.ing_software.entity.Curso
+com/ing_software/forms/Login.java
+ com.ing_software.forms.Login
+com/ing_software/forms/Signin.java
+ com.ing_software.forms.Signin
+ com.ing_software.forms.Signin$1
+ com.ing_software.forms.Signin$2
+com/ing_software/forms/VentanaAlumno.java
+ com.ing_software.forms.VentanaAlumno
+ com.ing_software.forms.VentanaAlumno$1
+ com.ing_software.forms.VentanaAlumno$2
+ com.ing_software.forms.VentanaAlumno$3
+ com.ing_software.forms.VentanaAlumno$4
+ com.ing_software.forms.VentanaAlumno$5
+ com.ing_software.forms.VentanaAlumno$6
+ com.ing_software.forms.VentanaAlumno$7
+com/ing_software/forms/GestionarAdministrador.java
+ com.ing_software.forms.GestionarAdministrador
+ com.ing_software.forms.GestionarAdministrador$1
+ com.ing_software.forms.GestionarAdministrador$2
+ com.ing_software.forms.GestionarAdministrador$3
+ com.ing_software.forms.GestionarAdministrador$4
+ com.ing_software.forms.GestionarAdministrador$5
+ com.ing_software.forms.GestionarAdministrador$6
+ com.ing_software.forms.GestionarAdministrador$7
+ com.ing_software.forms.GestionarAdministrador$8
 com/ing_software/forms/GestionarProfesor.java
  com.ing_software.forms.GestionarProfesor
-com/ing_software/entity/Profesor.java
- com.ing_software.entity.Profesor
-com/ing_software/entity/Estudiante.java
- com.ing_software.entity.Estudiante
-com/ing_software/servicios/ProfesorUtilities.java
- com.ing_software.servicios.ProfesorUtilities
-com/ing_software/repo/CursoRepository.java
- com.ing_software.repo.CursoRepository
-com/ing_software/entity/Nota.java
- com.ing_software.entity.Nota
-com/ing_software/config/Configuracion.java
- com.ing_software.config.Configuracion
-com/ing_software/entity/Administrativo.java
- com.ing_software.entity.Administrativo
-com/ing_software/entity/Persona.java
- com.ing_software.entity.Persona
-com/ing_software/repo/RepresentanteRepository.java
- com.ing_software.repo.RepresentanteRepository
-com/ing_software/abstraccion/Effect.java
- com.ing_software.abstraccion.Effect
-com/ing_software/repo/EstudianteRepository.java
- com.ing_software.repo.EstudianteRepository
+ com.ing_software.forms.GestionarProfesor$1
+ com.ing_software.forms.GestionarProfesor$2
+ com.ing_software.forms.GestionarProfesor$3
+ com.ing_software.forms.GestionarProfesor$4
+ com.ing_software.forms.GestionarProfesor$5
+ com.ing_software.forms.GestionarProfesor$6
+ com.ing_software.forms.GestionarProfesor$7
+ com.ing_software.forms.GestionarProfesor$8
+com/ing_software/servicios/EstudianteUtilities.java
+ com.ing_software.servicios.EstudianteUtilities
 com/ing_software/forms/GestionarCurso.java
  com.ing_software.forms.GestionarCurso
  com.ing_software.forms.GestionarCurso$1
@@ -92,6 +127,8 @@ com/ing_software/forms/GestionarCurso.java
  com.ing_software.forms.GestionarCurso$12
  com.ing_software.forms.GestionarCurso$13
  com.ing_software.forms.GestionarCurso$14
+ com.ing_software.forms.GestionarCurso$15
+ com.ing_software.forms.GestionarCurso$16
  com.ing_software.forms.GestionarCurso$2
  com.ing_software.forms.GestionarCurso$3
  com.ing_software.forms.GestionarCurso$4
@@ -100,12 +137,8 @@ com/ing_software/forms/GestionarCurso.java
  com.ing_software.forms.GestionarCurso$7
  com.ing_software.forms.GestionarCurso$8
  com.ing_software.forms.GestionarCurso$9
-com/ing_software/repo/ProfesorRepository.java
- com.ing_software.repo.ProfesorRepository
-com/ing_software/forms/Administrador.java
- com.ing_software.forms.Administrador
- com.ing_software.forms.Administrador$1
- com.ing_software.forms.Administrador$2
+com/ing_software/Principal.java
+ com.ing_software.Principal
 com/ing_software/servicios/CursoUtilities.java
  com.ing_software.servicios.CursoUtilities
 com/ing_software/servicios/CuentaUtilities.java

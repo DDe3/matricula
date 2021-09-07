@@ -316,7 +316,7 @@ public class GestionarAlumno extends JFrame {
     }
 
     private void validacion() throws ExecutionException, InterruptedException {
-        disponibles = (List<String>) aux.get().stream()
+        disponibles = aux.get().stream()
                 .map(Cuenta::getNombre)
                 .collect(Collectors.toList());
     }

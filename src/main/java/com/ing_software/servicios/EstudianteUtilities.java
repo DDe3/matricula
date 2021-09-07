@@ -37,8 +37,6 @@ public class EstudianteUtilities {
 
     @TransactionScoped
     public void crearEstudiante(String cedula, String nombre, String telefono, Representante r, Cuenta c) {
-
-
         Estudiante e = new Estudiante();
         e.setCedula(cedula);
         e.setNombre(nombre);
@@ -46,7 +44,6 @@ public class EstudianteUtilities {
         e.setRepresentante(r);
         e.setMail(c.getNombre());
         e.setEstado(false);
-        e.setCuenta(c);
         cuentaUtilities.bindEstudiante(c, e);
         repo.save(e);
     }
@@ -71,14 +68,13 @@ public class EstudianteUtilities {
         mat.setAula(e.getCurso().getAula());
         mat.setParalelo(e.getCurso().getParalelo());
         mat.setRegistro(e);
+        mat.setAprobado("Cursando");
         e.addMatricula(mat);
-        System.out.println("Matricula " + mat + " added to: " + e);
     }
 
     @TransactionScoped
     public void removeMatricula(Estudiante e) {
         em.getTransaction().begin();
-        System.out.println("Matriculas de estudiante a retirar: " + e.getMatriculasRegistradas());
         Matricula m = e.getMatriculasRegistradas().get(0);
         e.getMatriculasRegistradas().remove(0);
         em.remove(m);

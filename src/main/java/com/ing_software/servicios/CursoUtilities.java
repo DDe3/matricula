@@ -31,13 +31,15 @@ public class CursoUtilities {
 
     @TransactionScoped
     public void registrarCurso(Curso c) {
-        System.out.println("Lista de size: "+ c.getEstudiantes().size()+ " recibida en registrarCurso: "+c.getEstudiantes());
         em.getTransaction().begin();
         if (!(c.getEstudiantes()==null)) {
             bindDataEstudiantes(c.getEstudiantes(),c);
         }
         if (!(c.getEncargado()==null)) {
             bindDataProfesor(c.getEncargado(),c);
+        }
+        if (!(c.getMaterias()==null)) {
+            bindMaterias(c,c.getMaterias());
         }
         em.persist(c);
         em.getTransaction().commit();
@@ -50,13 +52,11 @@ public class CursoUtilities {
         c.setAula(aula);
         c.setParalelo(paralelo);
         c.setCiclo(ciclo);
-        c.setDescripcion(paralelo+ciclo);
+        c.setDescripcion(ciclo+ " " +paralelo);
         c.setEstado(true);
-
         c.setMaterias(materias);
         c.setEstudiantes(estudiantes);
         c.setCupo(cupo);
-
         registrarCurso(c);
     }
 
@@ -77,11 +77,6 @@ public class CursoUtilities {
         c.setEncargado(p);
     }
 
-//    public void bindData(List<Materia> materias, Curso c) {
-//        materias.stream().forEach(x -> {
-//            x.setCur(c);
-//        });
-//    }
 
     public Optional<Curso> findByAula(String aula) {
         return repo.findPorAula(aula.toUpperCase());
@@ -100,6 +95,15 @@ public class CursoUtilities {
         em.getTransaction().commit();
     }
 
+    public void bindMaterias(Curso c, List<Materia> a) {
+        List<Materia> materias = new ArrayList<>(a);
+        materias.forEach(m ->  {
+            c.addMateria(a);
+            m.addCurso(c);
+        });
+
+    }
+
     public void removeProfesor(Curso c, Profesor p) {
         c.setEncargado(null);
         p.setCurso(null);
@@ -107,6 +111,15 @@ public class CursoUtilities {
         em.persist(c);
         em.persist(p);
         em.getTransaction().commit();
+    }
+
+    public List<Curso> findAll() {
+        return repo.findAll();
+    }
+
+    @TransactionScoped
+    public void save(Curso c) {
+        repo.save(c);
     }
 
 }

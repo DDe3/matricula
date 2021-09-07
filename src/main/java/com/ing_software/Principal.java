@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -34,15 +35,15 @@ public class Principal {
 
 
 
-//        JFrame login = new Login("Sistema de informacion");
-//        login.setVisible(true);
+        JFrame login = new Login("Sistema de informacion");
+        login.setVisible(true);
 
 //        EntityManagerFactory factory = Persistence
 //                .createEntityManagerFactory("matricula");
 //        EntityManager em = factory.createEntityManager();
 
 
-        new Principal().test();
+          //new Principal().test();
 
 //        CuentaRepository repo = se.select(CuentaRepository.class).get();
 //        Optional<Cuenta> aux = repo.findByName("correo2@uce.edu.ec","123456");
@@ -186,23 +187,55 @@ public class Principal {
 //        List<Estudiante> op = repo1.findAll();
 //        op.forEach(x-> System.out.println("Nombre: "+x.getNombre()));
 
-//        EstudianteRepository repo1 = se.select(EstudianteRepository.class).get();
-//        Optional<Estudiante> op = repo1.findPorCedula("1725875560");
-//        System.out.println(op.isPresent());
-//        Estudiante e = op.get();
+        //EstudianteRepository repo1 = se.select(EstudianteRepository.class).get();
+        //Optional<Estudiante> op = repo1.findPorCedula("1715241434");
+        //System.out.println(op.isPresent());
+        //Estudiante e = op.get();
+        //Estudiante estudiante = repo1.findBy(2014);
+
+
+//        Curso c = e.getCurso();
+//        List<Matricula> matriculas = e.getMatriculasRegistradas();
+//
+//        List<Materia> materias = c.getMaterias();
+//        System.out.println("Materias de este curso: " +materias);
+//
+//        List<String> codigos = materias.stream().map(Materia::getCodigo).collect(Collectors.toList());
+//        for (String s: codigos) {
+//            Nota nota = new Nota();
+//            nota.calcular((double) (Math.round(Math.random() * (10 - 3)) + 3),(double) (Math.round(Math.random() * (10 - 3)) + 3),(double) (Math.round(Math.random() * (10 - 3)) + 3));
+//            nota.setCodmat(s);
+//            e.addNota(nota);
+//            nota.setPert(e);
+//        }
+//
 //        System.out.println("Nombre cuenta: " +e.getCuenta().getNombre());
 //        System.out.println("Pass cuenta: " +e.getCuenta().getPassword());
-//        System.out.println(e.getMatriculasRegistradas());
+        //System.out.println(e.getNotas());
+        //repo1.save(e);
+
+        //System.out.println(estudiante.getNotas());
+
+
+
+//        CursoRepository repo1 = se.select(CursoRepository.class).get();
+//        Curso c = repo1.findBy(7);
+//        System.out.println(c.getEstudiantes());
 
 
 
 
-        {
-            CuentaRepository repo4 = se.select(CuentaRepository.class).get();
-            Cuenta c = repo4.findBy(6);
-            JFrame login = new Administrador("Sistema de informacion - Administrador",c);
-            login.setVisible(true);
-        }
+
+
+
+
+
+//        {
+//            CuentaRepository repo4 = se.select(CuentaRepository.class).get();
+//            Cuenta c = repo4.findBy(6);
+//            JFrame login = new Administrador("Sistema de informacion - Administrador",c);
+//            login.setVisible(true);
+//        }
 
 
 

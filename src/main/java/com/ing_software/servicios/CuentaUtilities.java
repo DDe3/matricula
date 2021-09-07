@@ -53,17 +53,14 @@ public class CuentaUtilities implements ServicioCuenta {
         repo.save(cuenta);
     }
 
-    @TransactionScoped
     public void bindEstudiante(Cuenta c, Estudiante p) {
+        p.setCuenta(c);
         c.setOwner1(p);
-        repo.save(c);
     }
 
-    @TransactionScoped
     public void bindProfesor(Cuenta c, Profesor p) {
         p.setCuenta(c);
         c.setOwner2(p);
-        repo.save(c);
     }
 
     public void bindAdministrativo(Cuenta c, Administrativo p) {

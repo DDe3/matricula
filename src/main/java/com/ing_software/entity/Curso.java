@@ -45,4 +45,16 @@ public class Curso {
         }
     }
 
+    @Override
+    public String toString() {
+        return  "Aula :'" + aula +
+                " Paralelo: " + paralelo +
+                " Ciclo: '" + ciclo;
+    }
+
+    public void addEstudiante(Estudiante e) {
+        if (!estudiantes.contains(e)) {
+            estudiantes.add(e);
+        }
+    }
 }

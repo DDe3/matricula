@@ -24,14 +24,11 @@ public class Matricula {
     Character paralelo;
 
 
+    String aprobado;
+
+
     public String toString() {
-        String status;
-        if (this.estado) {
-            status = "Activo";
-        } else {
-            status = "No activo";
-        }
-        return "Ciclo: "+ciclo+" | Fecha de registro: " +f_matricula.toString()+ " Curso: " + paralelo + status;
+        return "Ciclo: "+ciclo+" | Fecha de registro: " +f_matricula.toString()+ " Curso: " + paralelo + " " + estado;
     }
 
 }

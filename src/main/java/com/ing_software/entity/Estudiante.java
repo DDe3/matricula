@@ -34,7 +34,7 @@ public class Estudiante extends Persona {
     private Cuenta cuenta;
 
     @OneToMany(mappedBy = "pert", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Nota> notas;
+    private List<Nota> notas = new ArrayList<>();
 
     @Override
     public String reporte() {
@@ -50,6 +50,19 @@ public class Estudiante extends Persona {
         }
         if (aux) {
             this.matriculasRegistradas.add(0,m);
+        }
+    }
+
+    public void addNota(Nota n) {
+        boolean cond = true;
+        for (Nota not: notas) {
+            if (not.getCodmat().equalsIgnoreCase(n.codmat)) {
+                cond = false;
+                break;
+            }
+        }
+        if (cond) {
+            notas.add(n);
         }
     }
 

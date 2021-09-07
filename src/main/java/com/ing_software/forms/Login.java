@@ -68,12 +68,13 @@ public class Login extends JFrame {
                     );
                     result.bind(x ->
                     {
+                        Cuenta cuenta = c.get();
                         if (i == 0) {
-                            goToEstudiante();
+                            goToAlumno(cuenta);
                         } else if (i == 1) {
                             goToProfesor();
                         } else {
-                            goToAdministrador(c.get());
+                            goToAdministrador(cuenta);
                         }
                     }, x -> JOptionPane.showMessageDialog(null, x));
                 }
@@ -90,10 +91,6 @@ public class Login extends JFrame {
     }
 
 
-    private void goToEstudiante() {
-        JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta estudiante");
-    }
-
     private void goToAdministrador(Cuenta c) {
         JFrame admin = new Administrador("Sistema de Información - Administrador", c);
         admin.setVisible(true);
@@ -102,6 +99,12 @@ public class Login extends JFrame {
 
     private void goToProfesor() {
         JOptionPane.showMessageDialog(null, "Ingresaste a tu cuenta profesor");
+    }
+
+    private void goToAlumno(Cuenta c) {
+        JFrame alumno = new VentanaAlumno("Ventana Alumno", c);
+        alumno.setVisible(true);
+        this.dispose();
     }
 
     private boolean verificarModo(Cuenta c) {

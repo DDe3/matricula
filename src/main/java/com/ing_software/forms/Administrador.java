@@ -26,6 +26,8 @@ public class Administrador extends JFrame {
     private JButton alumno;
     private JFrame gestionarAlumno;
     private JFrame gestionarCurso;
+    private JFrame gestionAdmin;
+    private JFrame gestionProfesor;
 
 
     public Administrador(String title, Cuenta c) throws HeadlessException {
@@ -62,6 +64,25 @@ public class Administrador extends JFrame {
                     gestionarCurso = new GestionarCurso("Gestion de Cursos y Materias");
                 }
                 gestionarCurso.setVisible(true);
+            }
+        });
+
+        gestionarAdministradorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (gestionAdmin == null) {
+                    gestionAdmin = new GestionarAdministrador("Gestion de Administrador");
+                }
+                gestionAdmin.setVisible(true);
+            }
+        });
+        gestionarProfesorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (gestionProfesor == null) {
+                    gestionProfesor = new GestionarProfesor("Gestion de Profesor");
+                }
+                gestionProfesor.setVisible(true);
             }
         });
     }
